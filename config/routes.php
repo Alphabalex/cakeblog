@@ -70,6 +70,9 @@ $routes->scope('/', function (RouteBuilder $builder) {
      * You can remove these routes once you've connected the
      * routes you want in your application.
      */
+    $builder->scope('/posts', function (RouteBuilder $builder) {
+        $builder->connect('/tagged/*', ['controller' => 'Posts', 'action' => 'tags']);
+    });
     $builder->fallbacks();
 });
 
@@ -80,10 +83,10 @@ $routes->scope('/', function (RouteBuilder $builder) {
  * ```
  * $routes->scope('/api', function (RouteBuilder $builder) {
  *     // No $builder->applyMiddleware() here.
- *     
+ *
  *     // Parse specified extensions from URLs
  *     // $builder->setExtensions(['json', 'xml']);
- *     
+ *
  *     // Connect API actions here.
  * });
  * ```
