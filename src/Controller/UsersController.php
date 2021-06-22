@@ -12,16 +12,28 @@ namespace App\Controller;
 class UsersController extends AppController
 {
 
-    public function beforeFilter(\Cake\Event\EventInterface $event)
+    public function register()
     {
-        parent::beforeFilter($event);
-        // Configure the login action to not require authentication, preventing
-        // the infinite redirect loop issue
-        $this->Authentication->addUnauthenticatedActions(['login', 'add']);
+        $this->Authorization->skipAuthorization();
+        $this->viewBuilder()->setLayout('app');
+        $this->request->allowMethod(['get', 'post']);
+        $user = $this->Users->newEmptyEntity();
+        if ($this->request->is('post')) {
+            $user = $this->Users->patchEntity($user, $this->request->getData());
+            if ($this->Users->save($user)) {
+                $this->Flash->success(__('Account has been created successfully.'));
+
+                return $this->redirect(['action' => 'register']);
+            }
+            $this->Flash->error(__('Account could not be created! try again later...'));
+        }
+        $this->set(compact('user'));
     }
+
     public function login()
     {
         $this->Authorization->skipAuthorization();
+        $this->viewBuilder()->setLayout('app');
         $this->request->allowMethod(['get', 'post']);
         $result = $this->Authentication->getResult();
         // regardless of POST or GET, redirect if user is logged in
@@ -38,6 +50,11 @@ class UsersController extends AppController
         if ($this->request->is('post') && !$result->isValid()) {
             $this->Flash->error(__('Invalid username or password'));
         }
+    }
+
+    public function dashboard()
+    {
+        
     }
 
     public function logout()
@@ -98,6 +115,8 @@ class UsersController extends AppController
         }
         $this->set(compact('user'));
     }
+
+
 
     /**
      * Edit method

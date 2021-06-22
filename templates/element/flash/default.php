@@ -4,7 +4,7 @@
  * @var array $params
  * @var string $message
  */
-$class = 'message';
+$class = 'alert';
 if (!empty($params['class'])) {
     $class .= ' ' . $params['class'];
 }

@@ -3,11 +3,10 @@
         <div class="container-fluid">
             <!--logo-->
             <div class="logo">
-            <?php
-            echo $this->Html->image("logo-dark.png", [
+            <?= $this->Html->image("logo-dark.png", [
             "alt" => "logo",
-            "class"=>"logo-dark"
-            'url' => ['controller' => 'Pages', 'action' => 'index']
+            "class"=>"logo-dark",
+            'url' => ['controller' => 'Blog', 'action' => 'index']
             ]);
             ?>
             </div>
@@ -17,19 +16,22 @@
             <div class="collapse navbar-collapse" id="main_nav">
                 <ul class="navbar-nav ml-auto mr-auto">
                     <li class="nav-item">
-                        <a class="nav-link" href="contact.html"> Home </a>
+                        <a class="nav-link" href="<?=$this->Url->build(['controller'=>'Blog', 'action'=>'index']) ?>"> Home </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="contact.html"> About </a>
+                        <a class="nav-link" href="<?=$this->Url->build(['controller'=>'Blog', 'action'=>'about']) ?>"> About </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="contact.html"> Contact </a>
+                        <a class="nav-link" href="<?=$this->Url->build(['controller'=>'Blog', 'action'=>'contact']) ?>"> Contact </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="contact.html"> Login </a>
+                        <a class="nav-link" href="<?=$this->Url->build(['controller'=>'Users', 'action'=>'login']) ?>"> Login </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="contact.html"> Sign up </a>
+                        <a class="nav-link" href="<?=$this->Url->build(['controller'=>'Users', 'action'=>'logout']) ?>"> Logout </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="<?=$this->Url->build(['controller'=>'Users', 'action'=>'register']) ?>"> Sign up </a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="contact.html"> Authors </a>

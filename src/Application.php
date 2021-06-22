@@ -28,12 +28,14 @@ use Cake\Http\MiddlewareQueue;
 use Cake\ORM\Locator\TableLocator;
 use Cake\Routing\Middleware\AssetMiddleware;
 use Cake\Routing\Middleware\RoutingMiddleware;
+
 use Authentication\AuthenticationService;
 use Authentication\AuthenticationServiceInterface;
 use Authentication\AuthenticationServiceProviderInterface;
 use Authentication\Middleware\AuthenticationMiddleware;
 use Cake\Routing\Router;
 use Psr\Http\Message\ServerRequestInterface;
+
 use Authorization\AuthorizationService;
 use Authorization\AuthorizationServiceInterface;
 use Authorization\AuthorizationServiceProviderInterface;
@@ -60,7 +62,7 @@ class Application extends BaseApplication  implements AuthenticationServiceProvi
 
         return $middlewareQueue;
     }
-    
+
     public function getAuthorizationService(ServerRequestInterface $request): AuthorizationServiceInterface
     {
         $resolver = new OrmResolver();
