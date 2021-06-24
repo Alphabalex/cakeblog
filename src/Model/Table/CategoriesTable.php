@@ -9,27 +9,27 @@ use Cake\ORM\Table;
 use Cake\Validation\Validator;
 
 /**
- * Tags Model
+ * Categories Model
  *
- * @property \App\Model\Table\PostsTable&\Cake\ORM\Association\BelongsToMany $Posts
+ * @property \App\Model\Table\PostsTable&\Cake\ORM\Association\HasMany $Posts
  *
- * @method \App\Model\Entity\Tag newEmptyEntity()
- * @method \App\Model\Entity\Tag newEntity(array $data, array $options = [])
- * @method \App\Model\Entity\Tag[] newEntities(array $data, array $options = [])
- * @method \App\Model\Entity\Tag get($primaryKey, $options = [])
- * @method \App\Model\Entity\Tag findOrCreate($search, ?callable $callback = null, $options = [])
- * @method \App\Model\Entity\Tag patchEntity(\Cake\Datasource\EntityInterface $entity, array $data, array $options = [])
- * @method \App\Model\Entity\Tag[] patchEntities(iterable $entities, array $data, array $options = [])
- * @method \App\Model\Entity\Tag|false save(\Cake\Datasource\EntityInterface $entity, $options = [])
- * @method \App\Model\Entity\Tag saveOrFail(\Cake\Datasource\EntityInterface $entity, $options = [])
- * @method \App\Model\Entity\Tag[]|\Cake\Datasource\ResultSetInterface|false saveMany(iterable $entities, $options = [])
- * @method \App\Model\Entity\Tag[]|\Cake\Datasource\ResultSetInterface saveManyOrFail(iterable $entities, $options = [])
- * @method \App\Model\Entity\Tag[]|\Cake\Datasource\ResultSetInterface|false deleteMany(iterable $entities, $options = [])
- * @method \App\Model\Entity\Tag[]|\Cake\Datasource\ResultSetInterface deleteManyOrFail(iterable $entities, $options = [])
+ * @method \App\Model\Entity\Category newEmptyEntity()
+ * @method \App\Model\Entity\Category newEntity(array $data, array $options = [])
+ * @method \App\Model\Entity\Category[] newEntities(array $data, array $options = [])
+ * @method \App\Model\Entity\Category get($primaryKey, $options = [])
+ * @method \App\Model\Entity\Category findOrCreate($search, ?callable $callback = null, $options = [])
+ * @method \App\Model\Entity\Category patchEntity(\Cake\Datasource\EntityInterface $entity, array $data, array $options = [])
+ * @method \App\Model\Entity\Category[] patchEntities(iterable $entities, array $data, array $options = [])
+ * @method \App\Model\Entity\Category|false save(\Cake\Datasource\EntityInterface $entity, $options = [])
+ * @method \App\Model\Entity\Category saveOrFail(\Cake\Datasource\EntityInterface $entity, $options = [])
+ * @method \App\Model\Entity\Category[]|\Cake\Datasource\ResultSetInterface|false saveMany(iterable $entities, $options = [])
+ * @method \App\Model\Entity\Category[]|\Cake\Datasource\ResultSetInterface saveManyOrFail(iterable $entities, $options = [])
+ * @method \App\Model\Entity\Category[]|\Cake\Datasource\ResultSetInterface|false deleteMany(iterable $entities, $options = [])
+ * @method \App\Model\Entity\Category[]|\Cake\Datasource\ResultSetInterface deleteManyOrFail(iterable $entities, $options = [])
  *
  * @mixin \Cake\ORM\Behavior\TimestampBehavior
  */
-class TagsTable extends Table
+class CategoriesTable extends Table
 {
     /**
      * Initialize method
@@ -41,16 +41,14 @@ class TagsTable extends Table
     {
         parent::initialize($config);
 
-        $this->setTable('tags');
+        $this->setTable('categories');
         $this->setDisplayField('title');
         $this->setPrimaryKey('id');
 
         $this->addBehavior('Timestamp');
 
-        $this->belongsToMany('Posts', [
-            'foreignKey' => 'tag_id',
-            'targetForeignKey' => 'post_id',
-            'joinTable' => 'posts_tags',
+        $this->hasMany('Posts', [
+            'foreignKey' => 'category_id',
         ]);
     }
 

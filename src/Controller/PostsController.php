@@ -1,105 +1,126 @@
 <?php
+declare(strict_types=1);
 
 namespace App\Controller;
 
+/**
+ * Posts Controller
+ *
+ * @property \App\Model\Table\PostsTable $Posts
+ * @method \App\Model\Entity\Post[]|\Cake\Datasource\ResultSetInterface paginate($object = null, array $settings = [])
+ */
 class PostsController extends AppController
 {
+    /**
+     * Index method
+     *
+     * @return \Cake\Http\Response|null|void Renders view
+     */
     public function index()
     {
-        $this->loadComponent('Paginator');
-        $posts = $this->Paginator->paginate($this->Posts->find());
+        $this->paginate = [
+            'contain' => ['Categories','Users'],
+        ];
+        $posts = $this->paginate($this->Posts);
         $this->Authorization->skipAuthorization();
         $this->set(compact('posts'));
     }
 
-
-    public function view($slug = null)
+    /**
+     * View method
+     *
+     * @param string|null $id Post id.
+     * @return \Cake\Http\Response|null|void Renders view
+     * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
+     */
+    public function view($id = null)
     {
-        $post = $this->Posts
-        ->findBySlug($slug)
-        ->contain('Tags')
-        ->firstOrFail();
+        $post = $this->Posts->get($id, [
+            'contain' => ['Categories'],
+        ]);
+        // $post= $this->Posts->findBySlug($slug)->contain(['Categories','Tags'])->firstOrFail();
         $this->Authorization->skipAuthorization();
-    $this->set(compact('post'));
+        $this->set(compact('post'));
     }
 
+    /**
+     * Add method
+     *
+     * @return \Cake\Http\Response|null|void Redirects on successful add, renders view otherwise.
+     */
     public function add()
     {
         $post = $this->Posts->newEmptyEntity();
         $this->Authorization->authorize($post);
         if ($this->request->is('post')) {
             $post = $this->Posts->patchEntity($post, $this->request->getData());
-
+            if(!$post->getErrors){
+                $image=$this->request->getData('post_image');
+                $name=$image->getClientFilename();
+                $path=WWW_ROOT.'uploads'.DS.$name;
+                if($name){
+                    $image->moveTo($path);
+                    $post->image=$name;
+                }
+            }
             $post->user_id = $this->request->getAttribute('identity')->getIdentifier();
-            $post->category_id = 1;
-
-
             if ($this->Posts->save($post)) {
-                $this->Flash->success(__('Your post has been saved.'));
+                $this->Flash->success(__('The post has been saved.'));
+
                 return $this->redirect(['action' => 'index']);
             }
-            $this->Flash->error(__('Unable to add your post.'));
+            $this->Flash->error(__('The post could not be saved. Please, try again.'));
         }
-        // Get a list of tags.
-        $tags = $this->Posts->Tags->find('list')->all();
-
-        // Set tags to the view context
-        $this->set('tags', $tags);
-        //set post to the view context
-        $this->set('post', $post);
+        $categories = $this->Posts->Categories->find('list', ['limit' => 200]);
+        $this->set(compact('post', 'categories'));
     }
 
-    public function edit($slug)
+    /**
+     * Edit method
+     *
+     * @param string|null $id Post id.
+     * @return \Cake\Http\Response|null|void Redirects on successful edit, renders view otherwise.
+     * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
+     */
+    public function edit($id = null)
     {
-        $post = $this->Posts
-        ->findBySlug($slug)
-        ->contain('Tags')
-        ->firstOrFail();
+        $post = $this->Posts->get($id, [
+            'contain' => ['Categories'],
+        ]);
         $this->Authorization->authorize($post);
-        if ($this->request->is(['post', 'put'])) {
-            $this->Posts->patchEntity($post, $this->request->getData(),[
+        if ($this->request->is(['patch', 'post', 'put'])) {
+            $post = $this->Posts->patchEntity($post, $this->request->getData(),[
                 'accessibleFields' => ['user_id' => false]
             ]);
             if ($this->Posts->save($post)) {
-                $this->Flash->success(__('Your post has been updated.'));
+                $this->Flash->success(__('The post has been saved.'));
+
                 return $this->redirect(['action' => 'index']);
             }
-            $this->Flash->error(__('Unable to update your post.'));
+            $this->Flash->error(__('The post could not be saved. Please, try again.'));
         }
-        // Get a list of tags.
-        $tags = $this->Posts->Tags->find('list')->all();
-
-        // Set tags to the view context
-        $this->set('tags', $tags);
-
-        $this->set('post', $post);
+        $categories = $this->Posts->Categories->find('list', ['limit' => 200]);
+        $this->set(compact('post', 'categories'));
     }
-    public function delete($slug)
+
+    /**
+     * Delete method
+     *
+     * @param string|null $id Post id.
+     * @return \Cake\Http\Response|null|void Redirects to index.
+     * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
+     */
+    public function delete($id = null)
     {
         $this->request->allowMethod(['post', 'delete']);
-
-        $post = $this->Posts->findBySlug($slug)->firstOrFail();
+        $post = $this->Posts->get($id);
         $this->Authorization->authorize($post);
         if ($this->Posts->delete($post)) {
-            $this->Flash->success(__('The post titled {0} has been deleted.', $post->title));
-            return $this->redirect(['action' => 'index']);
+            $this->Flash->success(__('The post has been deleted.'));
+        } else {
+            $this->Flash->error(__('The post could not be deleted. Please, try again.'));
         }
-    }
-    public function tags(...$tags)
-    {
-        // The 'pass' key is provided by CakePHP and contains all
-        // the passed URL path segments in the request.
-        // $tags = $this->request->getParam('pass');
-        $posts = $this->Posts->find('tagged', [
-                'tags' => $tags
-            ])
-            ->all();
-            $this->Authorization->skipAuthorization();
 
-        // Pass variables into the view template context.
-        $this->set([
-            'posts' => $posts,
-            'tags' => $tags
-        ]);
+        return $this->redirect(['action' => 'index']);
     }
 }

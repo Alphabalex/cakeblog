@@ -24,15 +24,21 @@
                     <li class="nav-item">
                         <a class="nav-link" href="<?=$this->Url->build(['controller'=>'Blog', 'action'=>'contact']) ?>"> Contact </a>
                     </li>
+                    <?php if($this->Identity->isLoggedIn()):?>
                     <li class="nav-item">
-                        <a class="nav-link" href="<?=$this->Url->build(['controller'=>'Users', 'action'=>'login']) ?>"> Login </a>
+                        <a class="nav-link" href="<?=$this->Url->build(['controller'=>'Users', 'action'=>'dashboard']) ?>"> Dashboard </a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="<?=$this->Url->build(['controller'=>'Users', 'action'=>'logout']) ?>"> Logout </a>
                     </li>
+                    <?php else:?>
+                    <li class="nav-item">
+                        <a class="nav-link" href="<?=$this->Url->build(['controller'=>'Users', 'action'=>'login']) ?>"> Login </a>
+                    </li>
                     <li class="nav-item">
                         <a class="nav-link" href="<?=$this->Url->build(['controller'=>'Users', 'action'=>'register']) ?>"> Sign up </a>
                     </li>
+                    <?php endif;?>
                     <li class="nav-item">
                         <a class="nav-link" href="contact.html"> Authors </a>
                     </li>

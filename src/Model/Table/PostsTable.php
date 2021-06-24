@@ -1,100 +1,118 @@
 <?php
+declare(strict_types=1);
+
 namespace App\Model\Table;
 
-use Cake\ORM\Table;
-use Cake\Utility\Text;
-use Cake\Event\EventInterface;
-use Cake\Validation\Validator;
 use Cake\ORM\Query;
+use Cake\ORM\RulesChecker;
+use Cake\ORM\Table;
+use Cake\Validation\Validator;
 
+/**
+ * Posts Model
+ *
+ * @property \App\Model\Table\UsersTable&\Cake\ORM\Association\BelongsTo $Users
+ * @property \App\Model\Table\CategoriesTable&\Cake\ORM\Association\BelongsTo $Categories
+ *
+ * @method \App\Model\Entity\Post newEmptyEntity()
+ * @method \App\Model\Entity\Post newEntity(array $data, array $options = [])
+ * @method \App\Model\Entity\Post[] newEntities(array $data, array $options = [])
+ * @method \App\Model\Entity\Post get($primaryKey, $options = [])
+ * @method \App\Model\Entity\Post findOrCreate($search, ?callable $callback = null, $options = [])
+ * @method \App\Model\Entity\Post patchEntity(\Cake\Datasource\EntityInterface $entity, array $data, array $options = [])
+ * @method \App\Model\Entity\Post[] patchEntities(iterable $entities, array $data, array $options = [])
+ * @method \App\Model\Entity\Post|false save(\Cake\Datasource\EntityInterface $entity, $options = [])
+ * @method \App\Model\Entity\Post saveOrFail(\Cake\Datasource\EntityInterface $entity, $options = [])
+ * @method \App\Model\Entity\Post[]|\Cake\Datasource\ResultSetInterface|false saveMany(iterable $entities, $options = [])
+ * @method \App\Model\Entity\Post[]|\Cake\Datasource\ResultSetInterface saveManyOrFail(iterable $entities, $options = [])
+ * @method \App\Model\Entity\Post[]|\Cake\Datasource\ResultSetInterface|false deleteMany(iterable $entities, $options = [])
+ * @method \App\Model\Entity\Post[]|\Cake\Datasource\ResultSetInterface deleteManyOrFail(iterable $entities, $options = [])
+ *
+ * @mixin \Cake\ORM\Behavior\TimestampBehavior
+ */
 class PostsTable extends Table
 {
+    /**
+     * Initialize method
+     *
+     * @param array $config The configuration for the Table.
+     * @return void
+     */
     public function initialize(array $config): void
     {
+        parent::initialize($config);
+
+        $this->setTable('posts');
+        $this->setDisplayField('title');
+        $this->setPrimaryKey('id');
+
         $this->addBehavior('Timestamp');
-        $this->belongsToMany('Tags', [
-            'joinTable' => 'posts_tags',
-            'dependent' => true
+
+        $this->belongsTo('Users', [
+            'foreignKey' => 'user_id',
+            'joinType' => 'INNER',
+        ]);
+        $this->belongsTo('Categories', [
+            'foreignKey' => 'category_id',
+            'joinType' => 'INNER',
         ]);
     }
-    public function beforeSave(EventInterface $event, $entity, $options)
-    {
-        if ($entity->isNew() && !$entity->slug) {
-            $sluggedTitle = Text::slug($entity->title);
-            // trim slug to maximum length defined in schema
-            $entity->slug = substr($sluggedTitle, 0, 191);
-        }
 
-        if ($entity->tag_string) {
-            $entity->tags = $this->_buildTags($entity->tag_string);
-        }
-
-    }
-    protected function _buildTags($tagString)
-    {
-        // Trim tags
-        $newTags = array_map('trim', explode(',', $tagString));
-        // Remove all empty tags
-        $newTags = array_filter($newTags);
-        // Reduce duplicated tags
-        $newTags = array_unique($newTags);
-
-        $out = [];
-        $tags = $this->Tags->find()
-            ->where(['Tags.title IN' => $newTags])
-            ->all();
-
-        // Remove existing tags from the list of new tags.
-        foreach ($tags->extract('title') as $existing) {
-            $index = array_search($existing, $newTags);
-            if ($index !== false) {
-                unset($newTags[$index]);
-            }
-        }
-        // Add existing tags.
-        foreach ($tags as $tag) {
-            $out[] = $tag;
-        }
-        // Add new tags.
-        foreach ($newTags as $tag) {
-            $out[] = $this->Tags->newEntity(['title' => $tag]);
-        }
-        return $out;
-    }
+    /**
+     * Default validation rules.
+     *
+     * @param \Cake\Validation\Validator $validator Validator instance.
+     * @return \Cake\Validation\Validator
+     */
     public function validationDefault(Validator $validator): Validator
     {
         $validator
-            ->notEmptyString('title')
-            ->minLength('title', 10)
-            ->maxLength('title', 255)
+            ->integer('id')
+            ->allowEmptyString('id', null, 'create');
 
-            ->notEmptyString('body')
-            ->minLength('body', 10);
+        $validator
+            ->scalar('title')
+            ->maxLength('title', 255)
+            ->requirePresence('title', 'create')
+            ->notEmptyString('title');
+
+        $validator
+            ->scalar('slug')
+            ->maxLength('slug', 191)
+            ->requirePresence('slug', 'create')
+            ->notEmptyString('slug')
+            ->add('slug', 'unique', ['rule' => 'validateUnique', 'provider' => 'table']);
+
+        $validator
+            ->scalar('body')
+            ->allowEmptyString('body');
+
+        $validator
+            ->scalar('image')
+            ->maxLength('image', 255)
+            ->requirePresence('image', 'create')
+            ->notEmptyFile('image');
+
+        $validator
+            ->boolean('published')
+            ->allowEmptyString('published');
 
         return $validator;
     }
-    public function findTagged(Query $query, array $options)
+
+    /**
+     * Returns a rules checker object that will be used for validating
+     * application integrity.
+     *
+     * @param \Cake\ORM\RulesChecker $rules The rules object to be modified.
+     * @return \Cake\ORM\RulesChecker
+     */
+    public function buildRules(RulesChecker $rules): RulesChecker
     {
-        $columns = [
-            'Posts.id', 'Posts.user_id', 'Posts.category_id', 'Posts.title',
-            'Posts.body', 'Posts.published', 'Posts.created',
-            'Posts.slug',
-        ];
+        $rules->add($rules->isUnique(['slug']), ['errorField' => 'slug']);
+        $rules->add($rules->existsIn(['user_id'], 'Users'), ['errorField' => 'user_id']);
+        $rules->add($rules->existsIn(['category_id'], 'Categories'), ['errorField' => 'category_id']);
 
-        $query = $query
-            ->select($columns)
-            ->distinct($columns);
-
-        if (empty($options['tags'])) {
-            // If there are no tags provided, find articles that have no tags.
-            $query->leftJoinWith('Tags')
-                ->where(['Tags.title IS' => null]);
-        } else {
-            // Find articles that have one or more of the provided tags.
-            $query->innerJoinWith('Tags')
-                ->where(['Tags.title IN' => $options['tags']]);
-        }
-
-        return $query->group(['Posts.id']);
+        return $rules;
     }
 }

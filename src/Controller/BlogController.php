@@ -14,6 +14,7 @@ class BlogController extends AppController
     {
         parent::beforeFilter($event);
         $this->viewBuilder()->setLayout('app');
+        $this->Authentication->addUnauthenticatedActions(['index','about','contact']);
     }
     /**
      * Index method
@@ -23,9 +24,17 @@ class BlogController extends AppController
     public function index()
     {
         $this->Authorization->skipAuthorization();
-        // $blog = $this->paginate($this->Blog);
+        $this->loadModel('Posts');
+        $this->paginate = [
+            'contain' => ['Categories','Users'],
+            'limit'=>'4',
+            'order'=>['Posts.id DESC'],
+        ];
 
-        // $this->set(compact('blog'));
+        $posts = $this->paginate($this->Posts);
+        $categories = $this->Posts->Categories->find('list', ['limit' => 50]);
+        $this->set(compact('categories', 'posts'));
+
     }
 
     public function about()

@@ -1,10 +1,21 @@
-<h1>Edit Post</h1>
-<?php
-    echo $this->Form->create($post);
-    echo $this->Form->control('category_id', ['type' => 'hidden']);
-    echo $this->Form->control('title');
-    echo $this->Form->control('tag_string', ['type' => 'text']);
-    echo $this->Form->control('body', ['rows' => '10']);
-    echo $this->Form->button(__('Update Post'));
-    echo $this->Form->end();
-?>
+    <div class="column-responsive column-80">
+        <div class="posts form content">
+            <?= $this->Form->create($post) ?>
+            <fieldset>
+                <legend><?= __('Edit Post') ?></legend>
+                <?php
+                    echo $this->Form->control('category_id', ['options' => $categories]);
+                    echo $this->Form->control('title');
+                    echo $this->Form->control('body');
+                    echo $this->Form->control('published');
+                ?>
+            </fieldset>
+            <?= $this->Form->button(__('Submit')) ?>
+            <?= $this->Form->end() ?>
+            <?= $this->Form->postLink(
+                __('Delete'),
+                ['action' => 'delete', $post->id],
+                ['confirm' => __('Are you sure you want to delete this post #{0}?', $post->id), 'class' => 'side-nav-item']
+            ) ?>
+        </div>
+    </div>

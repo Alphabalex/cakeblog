@@ -38,16 +38,33 @@ $cakeDescription = 'CakePHP: the rapid development php framework';
 <body>
     <nav class="top-nav">
         <div class="top-nav-title">
-            <a href="<?= $this->Url->build('/') ?>"><span>Noon</span>Post</a>
+            <a href="<?= $this->Url->build('/') ?>"><span>Cake</span>Blog</a>
         </div>
         <div class="top-nav-links">
+            <?php $name = $this->Identity->get('firstname'); ?>
             <a href="<?= $this->Url->build('/') ?>">Home</a>
+            <a href="#"><?= "Welcome ". $name ?></a>
         </div>
     </nav>
     <main class="main">
         <div class="container">
             <?= $this->Flash->render() ?>
-            <?= $this->fetch('content') ?>
+            <h1><?= $this->Html->link(__('Dashboard'), ['controller'=>'Users','action' => 'dashboard'], ['class' => 'side-nav-item']) ?></h1>
+            <div class="row">
+                <aside class="column">
+                    <div class="side-nav">
+                        <h4 class="heading"><?= __('Actions') ?></h4>
+                        <?= $this->Html->link(__('List Posts'), ['controller'=>'Posts','action' => 'index'], ['class' => 'side-nav-item']) ?>
+                        <?= $this->Html->link(__('New Post'), ['controller'=>'Posts','action' => 'add'], ['class' => 'side-nav-item']) ?>
+                        <?= $this->Html->link(__('List Users'), ['controller'=>'users','action' => 'index'], ['class' => 'side-nav-item']) ?>
+                        <?= $this->Html->link(__('New User'), ['controller'=>'Users','action' => 'add'], ['class' => 'side-nav-item']) ?>
+                        <?= $this->Html->link(__('List Categories'), ['controller'=>'Categories','action' => 'index'], ['class' => 'side-nav-item']) ?>
+                        <?= $this->Html->link(__('New Category'), ['controller'=>'Categories','action' => 'add'], ['class' => 'side-nav-item']) ?>
+                    </div>
+                </aside>
+                <?= $this->fetch('content') ?>
+            </div>
+
         </div>
     </main>
     <footer>

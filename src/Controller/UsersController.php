@@ -20,6 +20,7 @@ class UsersController extends AppController
         $user = $this->Users->newEmptyEntity();
         if ($this->request->is('post')) {
             $user = $this->Users->patchEntity($user, $this->request->getData());
+            $user->role='author';
             if ($this->Users->save($user)) {
                 $this->Flash->success(__('Account has been created successfully.'));
 
@@ -40,8 +41,8 @@ class UsersController extends AppController
         if ($result->isValid()) {
             // redirect to /posts after login success
             $redirect = $this->request->getQuery('redirect', [
-                'controller' => 'Posts',
-                'action' => 'index',
+                'controller' => 'Users',
+                'action' => 'dashboard',
             ]);
 
             return $this->redirect($redirect);
@@ -54,7 +55,10 @@ class UsersController extends AppController
 
     public function dashboard()
     {
-        
+
+
+        $this->Authorization->skipAuthorization();
+
     }
 
     public function logout()
@@ -74,6 +78,7 @@ class UsersController extends AppController
      */
     public function index()
     {
+        $this->Authorization->skipAuthorization();
         $users = $this->paginate($this->Users);
 
         $this->set(compact('users'));
@@ -88,6 +93,7 @@ class UsersController extends AppController
      */
     public function view($id = null)
     {
+        $this->Authorization->skipAuthorization();
         $user = $this->Users->get($id, [
             'contain' => ['Posts'],
         ]);
@@ -127,6 +133,7 @@ class UsersController extends AppController
      */
     public function edit($id = null)
     {
+        $this->Authorization->skipAuthorization();
         $user = $this->Users->get($id, [
             'contain' => [],
         ]);
@@ -151,6 +158,7 @@ class UsersController extends AppController
      */
     public function delete($id = null)
     {
+        $this->Authorization->skipAuthorization();
         $this->request->allowMethod(['post', 'delete']);
         $user = $this->Users->get($id);
         if ($this->Users->delete($user)) {

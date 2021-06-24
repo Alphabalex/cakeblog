@@ -6,7 +6,7 @@ namespace App\Model\Entity;
 use Cake\ORM\Entity;
 
 /**
- * Tag Entity
+ * Category Entity
  *
  * @property int $id
  * @property string|null $title
@@ -15,7 +15,7 @@ use Cake\ORM\Entity;
  *
  * @property \App\Model\Entity\Post[] $posts
  */
-class Tag extends Entity
+class Category extends Entity
 {
     /**
      * Fields that can be mass assigned using newEntity() or patchEntity().

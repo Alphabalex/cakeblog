@@ -15,6 +15,14 @@
                 <?= $this->Form->create($user,['class'=>'sign-form widget-form contact_form']) ?>
                     <div class="form-group">
 
+                    <input type="text" class="form-control" placeholder="Firstname*" name="firstname" required>
+                    </div>
+                    <div class="form-group">
+
+                    <input type="text" class="form-control" placeholder="Lastname*" name="lastname" required>
+                    </div>
+                    <div class="form-group">
+
                     <input type="email" class="form-control" placeholder="Email Address*" name="email" required>
                     </div>
                     <div class="form-group">
