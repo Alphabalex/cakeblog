@@ -43,23 +43,25 @@ $cakeDescription = 'CakePHP: the rapid development php framework';
         <div class="top-nav-links">
             <?php $name = $this->Identity->get('firstname'); ?>
             <a href="<?= $this->Url->build('/') ?>">Home</a>
-            <a href="#"><?= "Welcome ". $name ?></a>
+            <a href="<?= $this->Url->build(['controller'=>'Users','action' => 'logout']) ?>">Logout</a>
         </div>
     </nav>
     <main class="main">
         <div class="container">
             <?= $this->Flash->render() ?>
-            <h1><?= $this->Html->link(__('Dashboard'), ['controller'=>'Users','action' => 'dashboard'], ['class' => 'side-nav-item']) ?></h1>
+            <h1><?= $this->Html->link(__('Hi '.$name.'!'), ['controller'=>'Users','action' => 'dashboard'], ['class' => 'side-nav-item']) ?></h1>
             <div class="row">
                 <aside class="column">
                     <div class="side-nav">
                         <h4 class="heading"><?= __('Actions') ?></h4>
                         <?= $this->Html->link(__('List Posts'), ['controller'=>'Posts','action' => 'index'], ['class' => 'side-nav-item']) ?>
                         <?= $this->Html->link(__('New Post'), ['controller'=>'Posts','action' => 'add'], ['class' => 'side-nav-item']) ?>
+                        <?php if($this->Identity->get('role')=='admin'): ?>
                         <?= $this->Html->link(__('List Users'), ['controller'=>'users','action' => 'index'], ['class' => 'side-nav-item']) ?>
                         <?= $this->Html->link(__('New User'), ['controller'=>'Users','action' => 'add'], ['class' => 'side-nav-item']) ?>
                         <?= $this->Html->link(__('List Categories'), ['controller'=>'Categories','action' => 'index'], ['class' => 'side-nav-item']) ?>
                         <?= $this->Html->link(__('New Category'), ['controller'=>'Categories','action' => 'add'], ['class' => 'side-nav-item']) ?>
+                    <?php endif; ?>
                     </div>
                 </aside>
                 <?= $this->fetch('content') ?>

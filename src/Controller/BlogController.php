@@ -14,7 +14,7 @@ class BlogController extends AppController
     {
         parent::beforeFilter($event);
         $this->viewBuilder()->setLayout('app');
-        $this->Authentication->addUnauthenticatedActions(['index','about','contact']);
+        $this->Authentication->addUnauthenticatedActions(['index','about','contact','category','view','search']);
     }
     /**
      * Index method
@@ -24,16 +24,14 @@ class BlogController extends AppController
     public function index()
     {
         $this->Authorization->skipAuthorization();
-        $this->loadModel('Posts');
         $this->paginate = [
             'contain' => ['Categories','Users'],
-            'limit'=>'4',
+            'limit'=>'10',
             'order'=>['Posts.id DESC'],
         ];
 
         $posts = $this->paginate($this->Posts);
-        $categories = $this->Posts->Categories->find('list', ['limit' => 50]);
-        $this->set(compact('categories', 'posts'));
+        $this->set(compact('posts'));
 
     }
 
@@ -46,83 +44,51 @@ class BlogController extends AppController
     {
         $this->Authorization->skipAuthorization();
     }
-    /**
-     * View method
-     *
-     * @param string|null $id Blog id.
-     * @return \Cake\Http\Response|null|void Renders view
-     * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
-     */
+
+    public function category($id=null)
+    {
+        $this->Authorization->skipAuthorization();
+        $cat = $this->Categories->get($id, [
+            'contain' => ['Posts'],
+        ]);
+
+        $this->set(compact('cat'));
+    }
+
+    public function author($id=null)
+    {
+        $this->Authorization->skipAuthorization();
+        $author = $this->Users->get($id, [
+            'contain' => ['Posts'],
+        ]);
+
+        $this->set(compact('author'));
+    }
+
     public function view($id = null)
     {
-        $blog = $this->Blog->get($id, [
-            'contain' => [],
+        $this->Authorization->skipAuthorization();
+        $post = $this->Posts->get($id, [
+            'contain' => ['Categories','Users'],
         ]);
 
-        $this->set(compact('blog'));
+        $this->set(compact('post'));
     }
 
-    /**
-     * Add method
-     *
-     * @return \Cake\Http\Response|null|void Redirects on successful add, renders view otherwise.
-     */
-    public function add()
+    public function search()
     {
-        $blog = $this->Blog->newEmptyEntity();
-        if ($this->request->is('post')) {
-            $blog = $this->Blog->patchEntity($blog, $this->request->getData());
-            if ($this->Blog->save($blog)) {
-                $this->Flash->success(__('The blog has been saved.'));
+        $this->Authorization->skipAuthorization();
+        $search=$this->request->getQuery('q');
+        $this->paginate = [
+            'contain' => ['Categories','Users'],
+            'limit'=>'10',
+            'order'=>['Posts.id DESC'],
+        ];
+        $posts = $this->paginate($this->Posts->find()->where(function($exp,$query) use($search){
+            return $exp->like('Posts.title','%'.$search.'%');
+        }));
+        $this->set('posts',$posts);
 
-                return $this->redirect(['action' => 'index']);
-            }
-            $this->Flash->error(__('The blog could not be saved. Please, try again.'));
-        }
-        $this->set(compact('blog'));
     }
 
-    /**
-     * Edit method
-     *
-     * @param string|null $id Blog id.
-     * @return \Cake\Http\Response|null|void Redirects on successful edit, renders view otherwise.
-     * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
-     */
-    public function edit($id = null)
-    {
-        $blog = $this->Blog->get($id, [
-            'contain' => [],
-        ]);
-        if ($this->request->is(['patch', 'post', 'put'])) {
-            $blog = $this->Blog->patchEntity($blog, $this->request->getData());
-            if ($this->Blog->save($blog)) {
-                $this->Flash->success(__('The blog has been saved.'));
-
-                return $this->redirect(['action' => 'index']);
-            }
-            $this->Flash->error(__('The blog could not be saved. Please, try again.'));
-        }
-        $this->set(compact('blog'));
-    }
-
-    /**
-     * Delete method
-     *
-     * @param string|null $id Blog id.
-     * @return \Cake\Http\Response|null|void Redirects to index.
-     * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
-     */
-    public function delete($id = null)
-    {
-        $this->request->allowMethod(['post', 'delete']);
-        $blog = $this->Blog->get($id);
-        if ($this->Blog->delete($blog)) {
-            $this->Flash->success(__('The blog has been deleted.'));
-        } else {
-            $this->Flash->error(__('The blog could not be deleted. Please, try again.'));
-        }
-
-        return $this->redirect(['action' => 'index']);
-    }
 }

@@ -13,10 +13,6 @@
                     <td><?= h($post->title) ?></td>
                 </tr>
                 <tr>
-                    <th><?= __('Slug') ?></th>
-                    <td><?= h($post->slug) ?></td>
-                </tr>
-                <tr>
                     <th><?= __('Id') ?></th>
                     <td><?= $this->Number->format($post->id) ?></td>
                 </tr>

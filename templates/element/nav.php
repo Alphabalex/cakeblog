@@ -24,6 +24,26 @@
                     <li class="nav-item">
                         <a class="nav-link" href="<?=$this->Url->build(['controller'=>'Blog', 'action'=>'contact']) ?>"> Contact </a>
                     </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link  dropdown-toggle" href="post-default.html" data-toggle="dropdown">Categories</a>
+                        <ul class="dropdown-menu fade-up">
+                        <?php foreach($categories as $key=> $category):?>
+                        <?php if(!empty($category->posts)):?>
+                            <li><a class="dropdown-item" href="<?=$this->Url->build(['controller'=>'Blog', 'action'=>'category',$category->id])?>"><?= $category->title?></a></li>
+                        <?php endif; ?>
+                        <?php endforeach; ?>
+                        </ul>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link  dropdown-toggle" href="post-default.html" data-toggle="dropdown">Authors</a>
+                        <ul class="dropdown-menu fade-up">
+                        <?php foreach($authors as $key=> $author):?>
+                        <?php if(!empty($author->posts)):?>
+                            <li><a class="dropdown-item" href="<?=$this->Url->build(['controller'=>'Blog', 'action'=>'author',$author->id])?>"><?= $author->firstname.' '.$author->lastname?></a></li>
+                        <?php endif; ?>
+                        <?php endforeach; ?>
+                        </ul>
+                    </li>
                     <?php if($this->Identity->isLoggedIn()):?>
                     <li class="nav-item">
                         <a class="nav-link" href="<?=$this->Url->build(['controller'=>'Users', 'action'=>'dashboard']) ?>"> Dashboard </a>
@@ -35,13 +55,7 @@
                     <li class="nav-item">
                         <a class="nav-link" href="<?=$this->Url->build(['controller'=>'Users', 'action'=>'login']) ?>"> Login </a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="<?=$this->Url->build(['controller'=>'Users', 'action'=>'register']) ?>"> Sign up </a>
-                    </li>
                     <?php endif;?>
-                    <li class="nav-item">
-                        <a class="nav-link" href="contact.html"> Authors </a>
-                    </li>
                 </ul>
             </div>
             <!--/-->

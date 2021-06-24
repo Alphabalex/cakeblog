@@ -18,11 +18,12 @@ class PostsController extends AppController
      */
     public function index()
     {
+        $this->Authorization->skipAuthorization();
         $this->paginate = [
             'contain' => ['Categories','Users'],
+            'order'=>['Posts.id DESC'],
         ];
         $posts = $this->paginate($this->Posts);
-        $this->Authorization->skipAuthorization();
         $this->set(compact('posts'));
     }
 
@@ -57,7 +58,7 @@ class PostsController extends AppController
             if(!$post->getErrors){
                 $image=$this->request->getData('post_image');
                 $name=$image->getClientFilename();
-                $path=WWW_ROOT.'uploads'.DS.$name;
+                $path=WWW_ROOT.'img'.DS.$name;
                 if($name){
                     $image->moveTo($path);
                     $post->image=$name;
@@ -92,6 +93,24 @@ class PostsController extends AppController
             $post = $this->Posts->patchEntity($post, $this->request->getData(),[
                 'accessibleFields' => ['user_id' => false]
             ]);
+            if(!$post->getErrors){
+                $image=$this->request->getData('change_image');
+                $name=$image->getClientFilename();
+                if($name){
+                    $path=WWW_ROOT.'img'.DS.$name;
+                    $image->moveTo($path);
+                    if($post->image!='')
+                    {
+                        $current_image=WWW_ROOT.'img'.DS.$post->image;
+                        if(file_exists($current_image))
+                        {
+                            unlink($current_image);
+                        }
+                    }
+
+                    $post->image=$name;
+                }
+            }
             if ($this->Posts->save($post)) {
                 $this->Flash->success(__('The post has been saved.'));
 
@@ -115,7 +134,15 @@ class PostsController extends AppController
         $this->request->allowMethod(['post', 'delete']);
         $post = $this->Posts->get($id);
         $this->Authorization->authorize($post);
+        if($post->image!='')
+        {
+            $current_image=WWW_ROOT.'img'.DS.$post->image;
+        }
         if ($this->Posts->delete($post)) {
+            if(file_exists($current_image))
+            {
+                unlink($current_image);
+            }
             $this->Flash->success(__('The post has been deleted.'));
         } else {
             $this->Flash->error(__('The post could not be deleted. Please, try again.'));

@@ -24,8 +24,8 @@
                 <button type="button" class="close">
                     <i class="icon_close"></i>
                 </button>
-                <form class="search-form" action="#">
-                    <input type="search" value="" placeholder="What are you looking for?">
+                <form class="search-form" action="<?= $this->Url->build(['controller'=>'Blog', 'action'=>'search'])?>" method="get">
+                    <input type="search" placeholder="What are you looking for?" name="q">
                     <button type="submit" class="search-btn">search</button>
                 </form>
             </div>

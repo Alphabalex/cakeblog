@@ -1,12 +1,13 @@
     <div class="column-responsive column-80">
         <div class="posts form content">
-            <?= $this->Form->create($post) ?>
+            <?= $this->Form->create($post,['type'=>'file']) ?>
             <fieldset>
                 <legend><?= __('Edit Post') ?></legend>
                 <?php
                     echo $this->Form->control('category_id', ['options' => $categories]);
                     echo $this->Form->control('title');
                     echo $this->Form->control('body');
+                    echo $this->Form->control('change_image',['type'=>'file']);
                     echo $this->Form->control('published');
                 ?>
             </fieldset>

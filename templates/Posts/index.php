@@ -7,10 +7,10 @@
                 <thead>
                     <tr>
                         <th><?= $this->Paginator->sort('id') ?></th>
-                        <th><?= $this->Paginator->sort('user_id') ?></th>
+                        <th><?= $this->Paginator->sort('user_id','Author') ?></th>
                         <th><?= $this->Paginator->sort('category_id') ?></th>
                         <th><?= $this->Paginator->sort('title') ?></th>
-                        <th><?= $this->Paginator->sort('slug') ?></th>
+                        <th><?= $this->Paginator->sort('image') ?></th>
                         <th><?= $this->Paginator->sort('published') ?></th>
                         <th><?= $this->Paginator->sort('created') ?></th>
                         <th><?= $this->Paginator->sort('modified') ?></th>
@@ -27,7 +27,7 @@
                         </td>
                         <td><?= $post->has('category') ? $this->Html->link($post->category->title, ['controller' => 'Categories', 'action' => 'view', $post->category->id]) : '' ?></td>
                         <td><?= h($post->title) ?></td>
-                        <td><?= h($post->slug) ?></td>
+                        <td><?=@$this->Html->image($post->image) ?></td>
                         <td><?= h($post->published) ?></td>
                         <td><?= h($post->created) ?></td>
                         <td><?= h($post->modified) ?></td>

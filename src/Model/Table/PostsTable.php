@@ -76,12 +76,12 @@ class PostsTable extends Table
             ->requirePresence('title', 'create')
             ->notEmptyString('title');
 
-        $validator
-            ->scalar('slug')
-            ->maxLength('slug', 191)
-            ->requirePresence('slug', 'create')
-            ->notEmptyString('slug')
-            ->add('slug', 'unique', ['rule' => 'validateUnique', 'provider' => 'table']);
+        // $validator
+        //     ->scalar('slug')
+        //     ->maxLength('slug', 191)
+        //     ->requirePresence('slug', 'create')
+        //     ->notEmptyString('slug')
+        //     ->add('slug', 'unique', ['rule' => 'validateUnique', 'provider' => 'table']);
 
         $validator
             ->scalar('body')
@@ -109,7 +109,7 @@ class PostsTable extends Table
      */
     public function buildRules(RulesChecker $rules): RulesChecker
     {
-        $rules->add($rules->isUnique(['slug']), ['errorField' => 'slug']);
+        // $rules->add($rules->isUnique(['slug']), ['errorField' => 'slug']);
         $rules->add($rules->existsIn(['user_id'], 'Users'), ['errorField' => 'user_id']);
         $rules->add($rules->existsIn(['category_id'], 'Categories'), ['errorField' => 'category_id']);
 

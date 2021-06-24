@@ -34,7 +34,7 @@
                                         </a>
                                     </li> -->
                                     <li>
-                                        <a href="#"><?= h($post->user->lastname) ?> <?= h($post->user->firstname) ?></a>
+                                        <a href="author.html"><?= h($post->user->lastname) ?> <?= h($post->user->firstname) ?></a>
                                     </li>
                                     <li class="dot"></li>
                                     <li><?= h($post->created) ?></li>

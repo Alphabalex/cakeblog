@@ -55,5 +55,17 @@ class AppController extends Controller
     {
         parent::beforeFilter($event);
         $this->Authentication->addUnauthenticatedActions(['login','register','logout']);
+        // loading category model
+        $this->loadModel('Categories');
+        $categories = $this->Categories->find('all',['contain'=>'Posts']);
+        $this->set('categories',$categories);
+        // loading post model
+        $this->loadModel('Posts');
+        $latests=$this->Posts->find('all')->order(['Posts.id DESC'])->limit('5');
+        $this->set('latests',$latests);
+        // loading user model
+        $this->loadModel('Users');
+        $authors = $this->Users->find('all',['contain'=>'Posts']);
+        $this->set('authors',$authors);
     }
 }

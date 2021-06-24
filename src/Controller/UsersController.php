@@ -55,9 +55,15 @@ class UsersController extends AppController
 
     public function dashboard()
     {
-
-
         $this->Authorization->skipAuthorization();
+        // loading post model
+        $this->loadModel('Posts');
+        $this->paginate = [
+            'contain' => ['Categories','Users'],
+            'order'=>['Posts.id DESC'],
+        ];
+        $posts = $this->paginate($this->Posts);
+        $this->set(compact('posts'));
 
     }
 
