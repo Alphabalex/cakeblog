@@ -50,7 +50,7 @@
                                     <div class="post-card-info">
                                         <ul class="list-inline">
                                             <li>
-                                                <a href="#"><?= $posts->user_id ?></a>
+                                                <a href="#"><?= $posts->user->firstname.' '. $posts->user->lastname?></a>
                                             </li>
                                             <li class="dot"></li>
                                             <li><?= h($posts->created) ?></li>
@@ -62,32 +62,6 @@
                         <?php endforeach; ?>
                     <?php endif; ?>
                             <!--/-->
-                        </div>
-
-                        <!--pagination-->
-                        <div class="col-lg-12">
-                            <div class="pagination mt--10">
-                                <ul class="list-inline">
-                                    <li class="active">
-                                        <a href="#">1</a>
-                                    </li>
-                                    <li>
-                                        <a href="#">2</a>
-                                    </li>
-                                    <li>
-                                        <a href="#">3</a>
-                                    </li>
-                                    <li>
-                                        <a href="#">4</a>
-                                    </li>
-                                    <li>
-                                        <a href="#">
-                                            <i class="arrow_carrot-2right"></i>
-                                        </a>
-                                    </li>
-                                </ul>
-                            </div>
-                        <!--/-->
                         </div>
                     </div>
                 <div class="col-lg-4 max-width">

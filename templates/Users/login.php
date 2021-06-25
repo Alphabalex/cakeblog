@@ -18,7 +18,6 @@
                         <input type="checkbox" class="custom-control-input" id="rememberMe">
                             <label class="custom-control-label" for="rememberMe">Remember Me</label>
                         </div>
-                        <a href="#" class="btn-link  ml-auto">Forgot Password?</a>
                     </div>
                     <div class="form-group">
                         <button type="submit" class="btn-custom">Login</button>

@@ -5,7 +5,7 @@
                 <div class="col-lg-6 offset-lg-3 col-md-8 offset-md-2 col-sm-10 offset-sm-1 text-center">
                     <div class="copyright">
                         <p>© Copyright 2021 Made By
-                            <a href="#">Balogun Abdulquddus</a>, All rights reserved.</p>
+                            <a href="https://linkedin.com/in/abdulquddus-balogun-905595143" target="_blank">Balogun Abdulquddus</a>, All rights reserved.</p>
                     </div>
                     <div class="back">
                         <a href="#" class="back-top">

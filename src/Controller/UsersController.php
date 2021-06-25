@@ -24,11 +24,10 @@ class UsersController extends AppController
             if ($this->Users->save($user)) {
                 $this->Flash->success(__('Account has been created successfully.'));
 
-                return $this->redirect(['action' => 'register']);
+                return $this->redirect(['controller'=>'Users','action' => 'login']);
             }
             $this->Flash->error(__('Account could not be created! try again later...'));
         }
-        $this->set(compact('user'));
     }
 
     public function login()
@@ -49,7 +48,7 @@ class UsersController extends AppController
         }
         // display error if user submitted and authentication failed
         if ($this->request->is('post') && !$result->isValid()) {
-            $this->Flash->error(__('Invalid username or password'));
+            $this->Flash->error(__('Invalid email or password'));
         }
     }
 

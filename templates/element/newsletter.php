@@ -16,21 +16,20 @@
                 </form>
                 <div class="social-icones">
                     <ul class="list-inline">
-                        <li>
-                            <a href="#">
-                                <i class="fab fa-facebook-f"></i>Facebook</a>
+                    <li>
+                            <a href="https://wa.me/+2348085744967" target="_blank">
+                                <i class="fab fa-whatsapp"></i>
+                            </a>
                         </li>
                         <li>
-                            <a href="#">
-                                <i class="fab fa-twitter"></i>Twitter </a>
+                            <a href="https://linkedin.com/in/abdulquddus-balogun-905595143" target="_blank">
+                                <i class="fab fa-linkedin"></i>
+                            </a>
                         </li>
                         <li>
-                            <a href="#">
-                                <i class="fab fa-instagram"></i>Instagram </a>
-                        </li>
-                        <li>
-                            <a href="#">
-                                <i class="fab fa-youtube"></i>Youtube</a>
+                            <a href="https://github.com/Alphabalex" target="_blank">
+                                <i class="fab fa-github"></i>
+                            </a>
                         </li>
                     </ul>
                 </div>

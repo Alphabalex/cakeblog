@@ -3,12 +3,10 @@
         <div class="container-fluid">
             <!--logo-->
             <div class="logo">
-            <?= $this->Html->image("logo-dark.png", [
-            "alt" => "logo",
-            "class"=>"logo-dark",
-            'url' => ['controller' => 'Blog', 'action' => 'index']
-            ]);
-            ?>
+            <a href="<?=$this->Url->build(['controller' => 'Blog', 'action' => 'index'])?>">
+                <?= $this->Html->image("logo-dark.png",["class"=>"logo-dark","alt" => "logo"]) ?>
+                <?= $this->Html->image("logo-white.png",["class"=>"logo-white","alt" => "logo"]) ?>
+            </a>
             </div>
             <!--/-->
 
@@ -25,7 +23,7 @@
                         <a class="nav-link" href="<?=$this->Url->build(['controller'=>'Blog', 'action'=>'contact']) ?>"> Contact </a>
                     </li>
                     <li class="nav-item dropdown">
-                        <a class="nav-link  dropdown-toggle" href="post-default.html" data-toggle="dropdown">Categories</a>
+                        <a class="nav-link  dropdown-toggle" href="#" data-toggle="dropdown">Categories</a>
                         <ul class="dropdown-menu fade-up">
                         <?php foreach($categories as $key=> $category):?>
                         <?php if(!empty($category->posts)):?>
@@ -35,7 +33,7 @@
                         </ul>
                     </li>
                     <li class="nav-item dropdown">
-                        <a class="nav-link  dropdown-toggle" href="post-default.html" data-toggle="dropdown">Authors</a>
+                        <a class="nav-link  dropdown-toggle" href="#" data-toggle="dropdown">Authors</a>
                         <ul class="dropdown-menu fade-up">
                         <?php foreach($authors as $key=> $author):?>
                         <?php if(!empty($author->posts)):?>
@@ -71,22 +69,17 @@
                 <div class="social-icones">
                     <ul class="list-inline">
                         <li>
-                            <a href="#">
+                            <a href="https://wa.me/+2348085744967" target="_blank">
                                 <i class="fab fa-whatsapp"></i>
                             </a>
                         </li>
                         <li>
-                            <a href="#">
+                            <a href="https://linkedin.com/in/abdulquddus-balogun-905595143" target="_blank">
                                 <i class="fab fa-linkedin"></i>
                             </a>
                         </li>
                         <li>
-                            <a href="#">
-                                <i class="fab fa-twitter"></i>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="#">
+                            <a href="https://github.com/Alphabalex" target="_blank">
                                 <i class="fab fa-github"></i>
                             </a>
                         </li>

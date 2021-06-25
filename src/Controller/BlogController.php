@@ -14,7 +14,7 @@ class BlogController extends AppController
     {
         parent::beforeFilter($event);
         $this->viewBuilder()->setLayout('app');
-        $this->Authentication->addUnauthenticatedActions(['index','about','contact','category','view','search']);
+        $this->Authentication->addUnauthenticatedActions(['index','about','contact','category','view','search','author']);
     }
     /**
      * Index method
@@ -28,6 +28,7 @@ class BlogController extends AppController
             'contain' => ['Categories','Users'],
             'limit'=>'10',
             'order'=>['Posts.id DESC'],
+            'conditions'=>['Posts.published'=>'1'],
         ];
 
         $posts = $this->paginate($this->Posts);
@@ -49,7 +50,7 @@ class BlogController extends AppController
     {
         $this->Authorization->skipAuthorization();
         $cat = $this->Categories->get($id, [
-            'contain' => ['Posts'],
+            'contain' => ['Posts.Users'],
         ]);
 
         $this->set(compact('cat'));
@@ -59,7 +60,7 @@ class BlogController extends AppController
     {
         $this->Authorization->skipAuthorization();
         $author = $this->Users->get($id, [
-            'contain' => ['Posts'],
+            'contain' => ['Posts.Categories'],
         ]);
 
         $this->set(compact('author'));
@@ -83,6 +84,7 @@ class BlogController extends AppController
             'contain' => ['Categories','Users'],
             'limit'=>'10',
             'order'=>['Posts.id DESC'],
+            'conditions'=>['Posts.published'=>'1']
         ];
         $posts = $this->paginate($this->Posts->find()->where(function($exp,$query) use($search){
             return $exp->like('Posts.title','%'.$search.'%');

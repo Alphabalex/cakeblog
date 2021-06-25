@@ -12,7 +12,7 @@
                     <h5>Sign up</h5>
                 </div>
                 <?= $this->Flash->render() ?>
-                <?= $this->Form->create($user,['class'=>'sign-form widget-form contact_form']) ?>
+                <form  action="<?=$this->Url->build(['controller'=>'Users', 'action'=>'register']) ?>" class="sign-form widget-form " method="post">
                     <div class="form-group">
 
                     <input type="text" class="form-control" placeholder="Firstname*" name="firstname" required>
@@ -33,7 +33,7 @@
                     <button type="submit" class="btn-custom">Sign Up</button>
                     </div>
                     <p class="form-group text-center">Already have an account? <a href="<?=$this->Url->build(['controller'=>'Users', 'action'=>'login']) ?>" class="btn-link">Login</a> </p>
-                <?= $this->Form->end() ?>
+                </form>
             </div>
 
 
