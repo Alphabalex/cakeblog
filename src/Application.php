@@ -105,6 +105,8 @@ class Application extends BaseApplication  implements AuthenticationServiceProvi
      */
     public function bootstrap(): void
     {
+        $this->addPlugin('DebugKit');
+
         $this->addPlugin('Authorization');
         // Call parent to load bootstrap from files.
         parent::bootstrap();
