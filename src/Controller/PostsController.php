@@ -22,6 +22,7 @@ class PostsController extends AppController
         $this->paginate = [
             'contain' => ['Categories','Users'],
             'order'=>['Posts.id DESC'],
+            'limit'=>'10',
         ];
         $posts = $this->paginate($this->Posts);
         $this->set(compact('posts'));

@@ -28,48 +28,70 @@ $cakeDescription = 'CakePHP: the rapid development php framework';
     <?= $this->Html->meta('icon') ?>
 
     <link href="https://fonts.googleapis.com/css?family=Raleway:400,700" rel="stylesheet">
-
-    <?= $this->Html->css(['normalize.min', 'milligram.min', 'cake']) ?>
-
     <?= $this->fetch('meta') ?>
+    <?= $this->Html->css(['all', 'elegant-font-icons', 'bootstrap.min','owl.carousel','style','custom','normalize.min', 'milligram.min', 'cake']) ?>
     <?= $this->fetch('css') ?>
-    <?= $this->fetch('script') ?>
 </head>
 <body>
     <nav class="top-nav">
         <div class="top-nav-title">
-            <a href="<?= $this->Url->build('/') ?>"><span>Cake</span>Blog</a>
-        </div>
-        <div class="top-nav-links">
             <?php $name = $this->Identity->get('firstname'); ?>
-            <a href="<?= $this->Url->build('/') ?>">Home</a>
-            <a href="<?= $this->Url->build(['controller'=>'Users','action' => 'logout']) ?>">Logout</a>
+            <a href="<?= $this->Url->build('/') ?>"><span>Cake</span>Blog</a>
         </div>
     </nav>
     <main class="main">
         <div class="container">
             <?= $this->Flash->render() ?>
-            <h1><?= $this->Html->link(__('Hi '.$name.'!'), ['controller'=>'Users','action' => 'dashboard'], ['class' => 'side-nav-item']) ?></h1>
-            <div class="row">
-                <aside class="column">
-                    <div class="side-nav">
-                        <h4 class="heading"><?= __('Actions') ?></h4>
-                        <?= $this->Html->link(__('List Posts'), ['controller'=>'Posts','action' => 'index'], ['class' => 'side-nav-item']) ?>
-                        <?= $this->Html->link(__('New Post'), ['controller'=>'Posts','action' => 'add'], ['class' => 'side-nav-item']) ?>
-                        <?php if($this->Identity->get('role')=='admin'): ?>
-                        <?= $this->Html->link(__('List Users'), ['controller'=>'users','action' => 'index'], ['class' => 'side-nav-item']) ?>
-                        <?= $this->Html->link(__('New User'), ['controller'=>'Users','action' => 'add'], ['class' => 'side-nav-item']) ?>
-                        <?= $this->Html->link(__('List Categories'), ['controller'=>'Categories','action' => 'index'], ['class' => 'side-nav-item']) ?>
-                        <?= $this->Html->link(__('New Category'), ['controller'=>'Categories','action' => 'add'], ['class' => 'side-nav-item']) ?>
-                    <?php endif; ?>
-                    </div>
-                </aside>
-                <?= $this->fetch('content') ?>
-            </div>
+            <nav class="navbar navbar-expand-lg navbar-light bg-light rounded">
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbars" aria-controls="navbars" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+                </button>
 
-        </div>
-    </main>
-    <footer>
-    </footer>
+                <div class="collapse navbar-collapse justify-content-md-center" id="navbars">
+                <ul class="navbar-nav">
+                    <li class="nav-item active">
+                    <a class="nav-link" href="<?= $this->Url->build(['controller'=>'Users','action' => 'dashboard']) ?>">Dashboard<span class="sr-only">(current)</span></a>
+                    </li>
+                    <li class="nav-item">
+                    <a class="nav-link" href="<?= $this->Url->build('/') ?>">Home</a>
+                    </li>
+                    <?php if($this->Identity->get('role')=='admin'): ?>
+                    <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="dropdown1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Category</a>
+                    <div class="dropdown-menu" aria-labelledby="dropdown1">
+                        <a class="dropdown-item" href="<?= $this->Url->build(['controller'=>'Categories','action' => 'add']) ?>">New Category</a>
+                        <a class="dropdown-item" href="<?= $this->Url->build(['controller'=>'Categories','action' => 'index']) ?>">List Categories</a>
+                    </div>
+                    </li>
+                    <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="dropdown2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">User</a>
+                    <div class="dropdown-menu" aria-labelledby="dropdown2">
+                        <a class="dropdown-item" href="<?= $this->Url->build(['controller'=>'Users','action' => 'add']) ?>">New User</a>
+                        <a class="dropdown-item" href="<?= $this->Url->build(['controller'=>'Users','action' => 'index']) ?>">List Users</a>
+                    </div>
+                    </li>
+                    <?php endif; ?>
+                    <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="dropdown3" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Post</a>
+                    <div class="dropdown-menu" aria-labelledby="dropdown3">
+                        <a class="dropdown-item" href="<?= $this->Url->build(['controller'=>'Posts','action' => 'add']) ?>">New Post</a>
+                        <a class="dropdown-item" href="<?= $this->Url->build(['controller'=>'Posts','action' => 'index']) ?>">List Posts</a>
+                    </div>
+                    </li>
+                    <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="dropdown4" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><?= $name ?></a>
+                    <div class="dropdown-menu" aria-labelledby="dropdown4">
+                        <a class="dropdown-item" href="<?= $this->Url->build(['controller'=>'Users','action' => 'logout']) ?>">Logout</a>
+                    </div>
+                    </li>
+                </ul>
+                </div>
+            </nav>
+            <?= $this->fetch('content') ?>
+            </div>
+        </main>
+    <?= $this->element('footer'); ?>
+    <?= $this->Html->script(['jquery-3.5.0.min','bootstrap.bundle.min',]) ?>
+    <?= $this->fetch('script') ?>
 </body>
 </html>

@@ -1,6 +1,6 @@
 <div class="column-responsive column-80">
     <div class="posts index content">
-        <?= $this->Html->link(__('New Post'), ['action' => 'add'], ['class' => 'button float-right']) ?>
+        <?= $this->Html->link(__('New Post'), ['controller'=>'Posts','action' => 'add'], ['class' => 'button float-right']) ?>
         <h3><?= __('Posts') ?></h3>
         <div class="table-responsive">
             <table>
@@ -27,30 +27,21 @@
                         </td>
                         <td><?= $post->has('category') ? $this->Html->link($post->category->title, ['controller' => 'Categories', 'action' => 'view', $post->category->id]) : '' ?></td>
                         <td><?= h($post->title) ?></td>
-                        <td><?=@$this->Html->image($post->image) ?></td>
+                        <td><?=@$this->Html->image($post->image,['width' => '100','height'=>'100']) ?></td>
                         <td><?= h($post->published) ?></td>
                         <td><?= h($post->created) ?></td>
                         <td><?= h($post->modified) ?></td>
                         <td class="actions">
-                            <?= $this->Html->link(__('View'), ['action' => 'view', $post->id]) ?>
-                            <?= $this->Html->link(__('Edit'), ['action' => 'edit', $post->id]) ?>
-                            <?= $this->Form->postLink(__('Delete'), ['action' => 'delete', $post->id], ['confirm' => __('Are you sure you want to delete # {0}?', $post->id)]) ?>
+                            <?= $this->Html->link(__('View'), ['controller'=>'Posts','action' => 'view', $post->id]) ?>
+                            <?= $this->Html->link(__('Edit'), ['controller'=>'Posts','action' => 'edit', $post->id]) ?>
+                            <?= $this->Form->postLink(__('Delete'), ['controller'=>'Posts','action' => 'delete', $post->id], ['confirm' => __('Are you sure you want to delete # {0}?', $post->id)]) ?>
                         </td>
                     </tr>
                     <?php endforeach; ?>
                 </tbody>
             </table>
         </div>
-        <div class="paginator">
-            <ul class="pagination">
-                <?= $this->Paginator->first('<< ' . __('first')) ?>
-                <?= $this->Paginator->prev('< ' . __('previous')) ?>
-                <?= $this->Paginator->numbers() ?>
-                <?= $this->Paginator->next(__('next') . ' >') ?>
-                <?= $this->Paginator->last(__('last') . ' >>') ?>
-            </ul>
-            <p><?= $this->Paginator->counter(__('Page {{page}} of {{pages}}, showing {{current}} record(s) out of {{count}} total')) ?></p>
-        </div>
+        <?= $this->element('paginator'); ?>
     </div>
 </div>
 

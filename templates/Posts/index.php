@@ -27,7 +27,7 @@
                         </td>
                         <td><?= $post->has('category') ? $this->Html->link($post->category->title, ['controller' => 'Categories', 'action' => 'view', $post->category->id]) : '' ?></td>
                         <td><?= h($post->title) ?></td>
-                        <td><?=@$this->Html->image($post->image) ?></td>
+                        <td><?=@$this->Html->image($post->image,['width' => '100','height'=>'100']) ?></td>
                         <td><?= h($post->published) ?></td>
                         <td><?= h($post->created) ?></td>
                         <td><?= h($post->modified) ?></td>
@@ -41,15 +41,6 @@
                 </tbody>
             </table>
         </div>
-        <div class="paginator">
-            <ul class="pagination">
-                <?= $this->Paginator->first('<< ' . __('first')) ?>
-                <?= $this->Paginator->prev('< ' . __('previous')) ?>
-                <?= $this->Paginator->numbers() ?>
-                <?= $this->Paginator->next(__('next') . ' >') ?>
-                <?= $this->Paginator->last(__('last') . ' >>') ?>
-            </ul>
-            <p><?= $this->Paginator->counter(__('Page {{page}} of {{pages}}, showing {{current}} record(s) out of {{count}} total')) ?></p>
-        </div>
+        <?= $this->element('paginator'); ?>
     </div>
 </div>
